@@ -14,7 +14,6 @@
     </properties>
 
     <build>
-        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <!-- Build an executable JAR -->
@@ -25,7 +24,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <!-- here we specify that we want to use the main method within the App class -->
+                            <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>Listener</mainClass>
                         </manifest>
                     </archive>
