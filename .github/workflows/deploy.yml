@@ -16,6 +16,9 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
      
           script: | 
+            mkdir test 
+            cd test 
+            git clone git@github.com:TinOroz/Kuna.git
             git clone https://github.com/TinOroz/Kuna.git
-            echo 'Deployment successful to digital ocean' 
+            echo 'Deployment successful to digital ocean'
             
