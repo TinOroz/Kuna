@@ -20,5 +20,5 @@ jobs:
             cd test 
             git clone https://github.com/TinOroz/Kuna.git
             echo 'Deployment successful to digital ocean' 
-            cd test/Kuna	
-	          mvn exec:java -Dexec.mainClass="Listener"
+            cd test/Kuna
+	    mvn exec:java -Dexec.mainClass="Listener"
