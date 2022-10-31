@@ -15,7 +15,7 @@ public class Explorer {
     private Socket socket;
 
     public Explorer() throws IOException {
-        FileReader reader = new FileReader("Dukat/bootstrappingNode.properties");
+        FileReader reader = new FileReader("bootstrappingNode.properties");
         Properties properties = new Properties();
         properties.load(reader);
 
@@ -62,7 +62,7 @@ public class Explorer {
         HashSet<String> peerList = new Gson().fromJson(serverResponseJSON.get("peers").toString(), listType);
 
 
-        BufferedReader alreadyKnownPeersReader = new BufferedReader(new FileReader("Dukat/Peers"));
+        BufferedReader alreadyKnownPeersReader = new BufferedReader(new FileReader("Kuna/Peers"));
         HashSet<String> alreadyKnownPeers = new HashSet<>();
 
         String line = alreadyKnownPeersReader.readLine();
@@ -74,7 +74,7 @@ public class Explorer {
             System.out.println(peer);
         }
 
-        BufferedWriter peersWriter = new BufferedWriter(new FileWriter("Dukat/Peers", true));
+        BufferedWriter peersWriter = new BufferedWriter(new FileWriter("Kuna/Peers", true));
         for (String peer : peerList) {
             if(alreadyKnownPeers.add(peer)) {
                 System.out.println(peer);
