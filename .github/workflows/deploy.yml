@@ -21,7 +21,3 @@ jobs:
             git clone https://github.com/TinOroz/Kuna.git 
             cd Kuna 
             mvn exec:java -Dexec.mainClass="Listener"
-	    
-	    
-	
-	    
