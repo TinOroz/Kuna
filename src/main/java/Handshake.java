@@ -11,25 +11,22 @@ public final class Handshake {
     private static boolean messageChecker(Socket socket, String message) throws IOException {
         JSONObject messageJSON = (JSONObject) JSONValue.parse(message);
 
-        if (messageJSON.keySet().size() != 3) {
-            Error.sendError(socket,"Wrong Protocol: " + messageJSON);
+        if (messageJSON.keySet().size() != 3 && messageJSON.keySet().size() != 2) {
+            Error.sendError(socket,"Unsupported protocol message received: " + messageJSON);
             return false;
         }
         for (Object key : messageJSON.keySet()) {
             String keyString = key.toString();
             if (!(keyString.equals("type") || keyString.equals("version") || keyString.equals("agent"))) {
-                Error.sendError(socket,"Wrong Protocol: " + messageJSON);
+                Error.sendError(socket,"Unsupported protocol message received: " + keyString);
                 return false;
             }
         }
         if (!messageJSON.get("type").equals("hello")) {
-            Error.sendError(socket, "Unsupported message type received");
+            Error.sendError(socket, "Received message: " + messageJSON + " prior to \\hello\\");
             return false;
-        } else if (!messageJSON.get("version").equals("0.8.0")) {
+        } else if (!messageJSON.get("version").toString().startsWith("0.8")) {
             Error.sendError(socket, "Unsupported message version received");
-            return false;
-        } else if (!messageJSON.get("agent").equals("Kerma−Core Client 0.8")) {
-            Error.sendError(socket, "Unsupported agent version received");
             return false;
         }
         return true;
@@ -45,7 +42,7 @@ public final class Handshake {
 
     public static boolean listenerHandshake(Listener listener, String message, PrintWriter out) throws IOException {
         if (message == null) {
-            Error.sendError(listener.getSocket(), "Wrong Protocol");
+            Error.sendError(listener.getSocket(), "Wrong Protocol. Message is: " + message);
             return false;
         }
         if (!messageChecker(listener.getSocket(), message)) return false;
@@ -55,15 +52,18 @@ public final class Handshake {
         return true;
     }
 
-    public static boolean explorerHandshake(Explorer explorer, PrintWriter out, BufferedReader buffer) throws IOException {
+    public static boolean explorerHandshake(Explorer explorer, PrintWriter out, BufferedReader in) throws IOException {
         out.println(helloMessage());
         out.flush();
 
-        String message = buffer.readLine();
+        String message = in.readLine();
         System.out.println(message);
+        for (int i = 0; i < 3; i++) {
+            System.out.println(in.readLine());
+        }
 
         if (message == null) {
-            Error.sendError(explorer.getSocket(),"Wrong Protocol: " + message);
+            Error.sendError(explorer.getSocket(),"Wrong Protocol. Message is: " + message);
             return false;
         }
         if (!messageChecker(explorer.getSocket(), message)) return false;

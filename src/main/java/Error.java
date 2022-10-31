@@ -13,5 +13,6 @@ public final class Error {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         out.println(message);
         out.flush();
+        System.err.println(message);
     }
 }
