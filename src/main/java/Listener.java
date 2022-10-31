@@ -42,6 +42,7 @@ public class Listener {
 
     public static void main(String[] args) throws IOException {
         Listener listener = new Listener();
+        System.out.println("Starting listener");
 
         try {
             while (true) {
