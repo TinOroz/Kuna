@@ -13,6 +13,7 @@ public class Listener {
     private Socket socket;
     private static ArrayList<ListenerThread> connectedPeers = new ArrayList<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(5);
+    private Handshake handshake = new Handshake();
 
     public Listener() throws IOException {
         this.serverSocket = new ServerSocket(18018);
@@ -43,6 +44,7 @@ public class Listener {
     public static void main(String[] args) throws IOException {
         Listener listener = new Listener();
         System.out.println("Starting listener");
+        System.out.println("My IP: " + listener.getSocket().getLocalAddress().getHostAddress());
 
         try {
             while (true) {
@@ -51,6 +53,7 @@ public class Listener {
                 ListenerThread peerThread = new ListenerThread(listener);
                 connectedPeers.add(peerThread);
                 pool.execute(peerThread);
+
             }
         } finally {
             listener.getServerSocket().close();

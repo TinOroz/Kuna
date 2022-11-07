@@ -3,6 +3,7 @@ import org.json.simple.JSONValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -32,7 +33,7 @@ public final class Handshake {
         return true;
     }
 
-    private static JSONObject helloMessage() {
+    static JSONObject helloMessage() {
         JSONObject helloMessage = new JSONObject();
         helloMessage.put("type", "hello");
         helloMessage.put("version", "0.8.0");
@@ -40,15 +41,34 @@ public final class Handshake {
         return helloMessage;
     }
 
+    static JSONObject getPeersMessage() {
+        JSONObject getPeersMessage = new JSONObject();
+        getPeersMessage.put("type", "getpeers");
+        getPeersMessage.put("version", "0.8.0");
+        getPeersMessage.put("agent", "Kerma−Core Client 0.8");
+        return getPeersMessage;
+    }
+
+    static JSONObject getErrorMessage() {
+        JSONObject getErrorMessage = new JSONObject();
+        getErrorMessage.put("type", "error");
+        getErrorMessage.put("version", "0.8.0");
+        getErrorMessage.put("agent", "Kerma−Core Client 0.8");
+        return getErrorMessage;
+    }
     public static boolean listenerHandshake(Listener listener, String message, PrintWriter out) throws IOException {
+        //out.println(helloMessage());
         if (message == null) {
             Error.sendError(listener.getSocket(), "Wrong Protocol. Message is: " + message);
             return false;
         }
-        if (!messageChecker(listener.getSocket(), message)) return false;
+        if (!messageChecker(listener.getSocket(), message)) {
+            Error.sendError(listener.getSocket(), "Wrong Protocol. Message is: " + message);
+            return false;
+        }
 
-        out.println(helloMessage());
-        out.flush();
+        //out.println(helloMessage());
+        //out.flush();
         return true;
     }
 

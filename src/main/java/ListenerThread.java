@@ -22,10 +22,17 @@ public class ListenerThread implements Runnable {
     @Override
     public void run() {
         try {
+            this.out.println(Handshake.helloMessage());
+            this.out.println(Handshake.getPeersMessage());
+            this.out.flush();
+
             String receivedMessage = in.readLine();
             System.out.println(receivedMessage);
 
-            if (!Handshake.listenerHandshake(listener, receivedMessage, out)) return;
+            if (!Handshake.listenerHandshake(listener, receivedMessage, out)) {
+                listener.getSocket().close();
+                return;
+            }
 
             try {
                 while (true) {
